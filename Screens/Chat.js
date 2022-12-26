@@ -1,10 +1,24 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { fileReader } from "../Context/localFile";
 
-const Chat = () => {
+const Chat = ({route}) => {
+
+    const fileUri = route.params.fileUri; 
+    const [chatContent, setchatContent] = useState("");
+
+    useEffect(()=>{
+        async function readingHandler (fileUri){
+            const chatContent = await fileReader(fileUri);
+            console.log("Fetched chat content");
+            setchatContent(chatContent);
+        }
+        readingHandler(fileUri);
+    },[fileUri]);
 
     return(
         <View style={styles.container}>
-            <Text>Chat screen</Text>
+            <Text>{chatContent}</Text>
         </View>
     );
 }

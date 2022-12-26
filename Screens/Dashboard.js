@@ -1,15 +1,24 @@
+import { useState } from "react";
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
-import { scale, verticalScale, moderateScale } from "../Constants/scales";
+import { documentPicker } from "../Context/localFile";
+import { scale, verticalScale, moderateScale } from "../Context/scales";
 
 const Dashboard = ({navigation}) => {
 
+    const [fileInfo, setFileInfo] = useState('');
+
     function chatScreen(){
-        navigation.navigate('Chat')
+        navigation.navigate('Chat',{
+            fileUri: fileInfo.uri
+        });
     }
 
-    function addNewHandler(){
+    async function addNewHandler(){
         console.log("addNewHandler clicked");
+        info = await documentPicker();
+        console.log("Fetched file information");
+        setFileInfo(info);
     }
 
     return(
