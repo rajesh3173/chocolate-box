@@ -14,7 +14,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
         headerStyle: {backgroundColor: Colors.primary800},
-        headerTintColor: 'white'
+        headerTintColor: 'white',
+        contentStyle: {backgroundColor: Colors.backgroundFull}
       }}>
         <Stack.Screen name='Dashboard' component={Dashboard} options={{title: "ChocolateBox"}} />
         <Stack.Screen name='Chat' component={Chat} options={{title: "Chat"}} />
