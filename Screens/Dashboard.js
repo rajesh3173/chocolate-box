@@ -4,29 +4,29 @@ import Colors from "../Constants/colors";
 import { documentPicker } from "../Context/localFile";
 import { scale, verticalScale, moderateScale } from "../Context/scales";
 
-const Dashboard = ({navigation}) => {
+const Dashboard = ({ navigation }) => {
 
     const [fileInfo, setFileInfo] = useState('');
 
-    function chatScreen(){
-        navigation.navigate('Chat',{
-            fileUri: fileInfo.uri
+    const chatScreen = () => {
+        navigation.navigate('Chat', {
+            fileUri: fileInfo.uri,
+            personOne: "Me",
+            personTwo: "Amma 😍😍"
         });
     }
 
-    async function addNewHandler(){
-        console.log("addNewHandler clicked");
-        info = await documentPicker();
-        console.log("Fetched file information");
+    const addNewHandler = async () => {
+        const info = await documentPicker();
         setFileInfo(info);
     }
 
-    return(
+    return (
         <View>
             <View style={styles.headerSection}>
                 <Text style={styles.headerText}>All Chats</Text>
-                <Pressable onPress={addNewHandler} style={ styles.addNewButton}>
-                   <Text style={styles.addNewButtonText}>+ Add New Chat</Text> 
+                <Pressable onPress={addNewHandler} style={styles.addNewButton}>
+                    <Text style={styles.addNewButtonText}>+ Add New Chat</Text>
                 </Pressable>
             </View>
             <Button title="chat" onPress={chatScreen} />
@@ -37,24 +37,24 @@ const Dashboard = ({navigation}) => {
 export default Dashboard;
 
 const styles = StyleSheet.create({
-    headerSection:{
+    headerSection: {
         paddingHorizontal: scale(15),
         paddingVertical: scale(10),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    headerText:{
+    headerText: {
         fontSize: moderateScale(18),
         fontWeight: 'bold'
     },
-    addNewButton:{
+    addNewButton: {
         padding: scale(5)
     },
-    addNewButtonText:{
+    addNewButtonText: {
         color: Colors.primary800
     },
-    test:{
+    test: {
         backgroundColor: 'pink'
     }
 });
