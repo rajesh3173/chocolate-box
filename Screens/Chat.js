@@ -1,39 +1,107 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import Conversation from "../Components/Conversation";
 import Colors from "../Constants/colors";
 import { fileReader } from "../Context/localFile";
-import { scale } from "../Context/scales";
+import { moderateScale, scale } from "../Context/scales";
 
-const Chat = ({route}) => {
+const Chat = ({ route, navigation }) => {
 
-    const fileUri = route.params.fileUri; 
-    const [chatContent, setchatContent] = useState("");
+    const fileUri = route.params.fileUri;
+    const personOne = route.params.personOne;
+    const personTwo = route.params.personTwo;
 
-    // useEffect(()=>{
-    //     async function readingHandler (fileUri){
-    //         const chatContent = await fileReader(fileUri);
-    //         console.log("Fetched chat content");
-    //         setchatContent(chatContent);
-    //     }
-    //     readingHandler(fileUri);
-    // },[fileUri]);
+    const [chatArray, setChatArray] = useState();
+    const [errorOccur, setErrorOccur] = useState(false);
 
-    return(
-        <View style={styles.container}>
-            <Conversation who={"personOne"}/>
-            <Conversation who={"personTwo"}/>
-        </View>
-    ); 
+    const arrangeArray = (chatFile) => {
+        let resultArray = [];
+        
+        const initialArray = chatFile.split("\n");
+        const arrayLength = initialArray.slice(-1) == "" ? initialArray.length - 1 : initialArray.length;
+        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} -/;
+        const initialIndex = initialArray[0].search("Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more") != -1 ? 1 : 0;
+
+        resultArray.push(initialArray[initialIndex]);
+        
+        for (let i = initialIndex + 1; i < arrayLength; i++) {
+            if (pattern.test(initialArray[i])) {
+                resultArray.push(initialArray[i]);
+            } else {
+                resultArray[resultArray.length - 1] = resultArray[resultArray.length - 1] + "\n" + initialArray[i];
+            }
+        }
+
+        return resultArray;
+    }
+
+    useEffect(() => {
+        const readingHandler = async (fileUri) => {
+            try {
+                const chatFile = await fileReader(fileUri);
+                const chatCon = arrangeArray(chatFile);
+                setChatArray(chatCon);
+            } catch (error) {
+                console.log(error);
+                setErrorOccur(true);
+            }
+        }
+        readingHandler(fileUri);
+    }, [fileUri]);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: personTwo
+        });
+    }, [fileUri, personTwo]);
+
+    if (errorOccur) {
+        
+        return (
+            <View style={styles.errorContainer} >
+                <Text style={styles.errorText} >Ooops....! Error while fetching chat....</Text>
+            </View>
+        );
+    }
+
+    return (
+        chatArray && (<View style={styles.container}>
+            <FlatList style={styles.flatListContaner} data={chatArray} renderItem={(chat) => {
+                const person = chat.item.includes(personOne) ? "personOne" : "personTwo";
+                const itemArray = chat.item.split(": ");
+                let chatText = itemArray[1];
+                const dtInfo = itemArray[0].split(", ");
+                const timeInfo = dtInfo[1].split(" - ")[0];
+                let [mo, da, yr] = dtInfo[0].split('/');
+                yr = 20 + yr;
+                const date = new Date(+yr, mo - 1, +da);
+                chatText = chatText == "<Media omitted>" ? "Ooops! Media" : chatText;
+                return (
+                    <Conversation who={person} text={chatText} dateIn={date.toDateString()} timeIn={timeInfo} />
+                );
+            }} />
+        </View>)
+    );
 }
 
 export default Chat;
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
-        paddingHorizontal: scale(18),
-        paddingVertical: scale(5),
-        // backgroundColor: Colors.backgroundFull
+        paddingBottom: scale(5)
+    },
+    flatListContaner: {
+        paddingHorizontal: scale(12),
+        paddingTop: scale(5)
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    errorText: {
+        fontSize: moderateScale(16),
+        color: Colors.danger
     }
 });

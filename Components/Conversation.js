@@ -1,21 +1,32 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
 import { moderateScale, scale } from "../Context/scales";
 
-const Conversation = (props) => {
-    const who = props.who;
-    console.log(who)
+const Conversation = ({ who, text, dateIn, timeIn}) => {
+
+    const [tmVisiable, setTmVisiable] = useState(false);
+
+    const timeVisiableHandler = () => {
+        setTmVisiable(!tmVisiable);
+    }
+
 
     return (
-        <View style={who == "personOne" ? [styles.container, styles.pOneContainer] : [styles.container, styles.pTwoContainer]} >
-            <View style={who == "personOne" ? [styles.alignContainer, styles.pOneAlignCon] : [styles.alignContainer, styles.pTwoAlignCon]}>
-                <Text style={who == "personOne" ? [styles.textContainer, styles.pOneText] : [styles.textContainer, styles.pTwoText]}>
-                    Nullam Nullam id dolor id nibh ultricies vehicula ut id elit. Donec id elit non mi porta gravida at eget metus.
-                </Text>
-                <Text style={who == "personOne" ? [styles.timeInfo, styles.pOneTimeInfo] : [styles.timeInfo, styles.pTwoTimeInfo]}>
-                    Wed 14 dec, 2022
-                </Text>
-            </View>
+        <View style={[styles.container, who == "personOne" ? styles.pOneContainer : styles.pTwoContainer]} >
+            <Pressable onPress={timeVisiableHandler}>
+                <View style={[styles.alignContainer, who == "personOne" ? styles.pOneAlignCon : styles.pTwoAlignCon]}>
+                    <Text style={[styles.textContainer, who == "personOne" ? styles.pOneText : styles.pTwoText]} >
+                        {text}
+                    </Text>
+                    <Text style={[styles.dateInfo, who == "personOne" ? styles.pOneDateInfo : styles.pTwoDateInfo]} >
+                        {dateIn}
+                    </Text>
+                </View>
+            </Pressable>
+            <Text style={[styles.timeInfo, tmVisiable ? { display: 'flex' } : { display: 'none' }]} >
+                {timeIn}
+            </Text>
         </View>
     );
 }
@@ -24,7 +35,7 @@ export default Conversation;
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: scale(5),
+        marginBottom: scale(5),
         width: '90%',
     },
     pOneContainer: {
@@ -36,7 +47,8 @@ const styles = StyleSheet.create({
         marginRight: 'auto'
     },
     alignContainer: {
-        padding: scale(15),
+        paddingHorizontal: scale(15),
+        paddingVertical: scale(7),
         borderTopLeftRadius: scale(20),
         borderTopRightRadius: scale(20)
     },
@@ -59,14 +71,18 @@ const styles = StyleSheet.create({
         color: Colors.secondaryText,
         marginRight: 'auto'
     },
-    timeInfo: {
-        fontSize: moderateScale(14),
-        marginTop: scale(6)
+    dateInfo: {
+        fontSize: moderateScale(13),
+        marginTop: scale(1)
     },
-    pOneTimeInfo: {
+    pOneDateInfo: {
         color: Colors.primaryShadow
     },
-    pTwoTimeInfo: {
+    pTwoDateInfo: {
         color: Colors.secondaryShadow
+    },
+    timeInfo: {
+        color: Colors.backgroundShadow,
+        fontSize: moderateScale(12)
     }
 });
