@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import Conversation from "../Components/Conversation";
 import Colors from "../Constants/colors";
 import { fileReader } from "../Context/localFile";
-import { moderateScale, scale } from "../Context/scales";
+import { moderateScale, scale, verticalScale } from "../Context/scales";
 
 const Chat = ({ route, navigation }) => {
 
@@ -16,14 +16,14 @@ const Chat = ({ route, navigation }) => {
 
     const arrangeArray = (chatFile) => {
         let resultArray = [];
-        
+
         const initialArray = chatFile.split("\n");
         const arrayLength = initialArray.slice(-1) == "" ? initialArray.length - 1 : initialArray.length;
-        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} -/;
+        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - /;
         const initialIndex = initialArray[0].search("Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more") != -1 ? 1 : 0;
 
         resultArray.push(initialArray[initialIndex]);
-        
+
         for (let i = initialIndex + 1; i < arrayLength; i++) {
             if (pattern.test(initialArray[i])) {
                 resultArray.push(initialArray[i]);
@@ -39,6 +39,7 @@ const Chat = ({ route, navigation }) => {
         const readingHandler = async (fileUri) => {
             try {
                 const chatFile = await fileReader(fileUri);
+                // console.log(chatFile);
                 const chatCon = arrangeArray(chatFile);
                 setChatArray(chatCon);
             } catch (error) {
@@ -56,7 +57,7 @@ const Chat = ({ route, navigation }) => {
     }, [fileUri, personTwo]);
 
     if (errorOccur) {
-        
+
         return (
             <View style={styles.errorContainer} >
                 <Text style={styles.errorText} >Ooops....! Error while fetching chat....</Text>
@@ -67,8 +68,15 @@ const Chat = ({ route, navigation }) => {
     return (
         chatArray && (<View style={styles.container}>
             <FlatList style={styles.flatListContaner} data={chatArray} renderItem={(chat) => {
-                const person = chat.item.includes(personOne) ? "personOne" : "personTwo";
-                const itemArray = chat.item.split(": ");
+                let itemArray = chat.item.split(": ");
+                if (itemArray.length > 2) {
+                    itemText = itemArray[1];
+                    for (let i = 2; i < itemArray.length; i++) {
+                        itemText = itemText + ": " + itemArray[i];
+                    }
+                    itemArray = [itemArray[0],itemText];
+                }
+                const person = itemArray[0].includes(personOne) ? "personOne" : "personTwo";
                 let chatText = itemArray[1];
                 const dtInfo = itemArray[0].split(", ");
                 const timeInfo = dtInfo[1].split(" - ")[0];
@@ -89,11 +97,11 @@ export default Chat;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: scale(5)
+        paddingBottom: scale(3)
     },
     flatListContaner: {
         paddingHorizontal: scale(12),
-        paddingTop: scale(5)
+        paddingTop: verticalScale(5)
     },
     errorContainer: {
         flex: 1,
