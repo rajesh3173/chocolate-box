@@ -11,7 +11,8 @@ const Dashboard = ({ navigation }) => {
     const chatScreen = () => {
         navigation.navigate('Chat', {
             fileUri: fileInfo.uri,
-            personOne: "Me",
+            personOne: "®@?€$#",
+            // personOne: "Me",
             personTwo: "Amma 😍😍"
         });
     }
@@ -39,7 +40,7 @@ export default Dashboard;
 const styles = StyleSheet.create({
     headerSection: {
         paddingHorizontal: scale(15),
-        paddingVertical: scale(10),
+        paddingVertical: verticalScale(10),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -53,8 +54,5 @@ const styles = StyleSheet.create({
     },
     addNewButtonText: {
         color: Colors.primary800
-    },
-    test: {
-        backgroundColor: 'pink'
     }
 });

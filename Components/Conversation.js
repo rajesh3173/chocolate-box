@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
-import { moderateScale, scale } from "../Context/scales";
+import { moderateScale, scale, verticalScale } from "../Context/scales";
 
 const Conversation = ({ who, text, dateIn, timeIn}) => {
 
@@ -10,7 +10,6 @@ const Conversation = ({ who, text, dateIn, timeIn}) => {
     const timeVisiableHandler = () => {
         setTmVisiable(!tmVisiable);
     }
-
 
     return (
         <View style={[styles.container, who == "personOne" ? styles.pOneContainer : styles.pTwoContainer]} >
@@ -35,7 +34,7 @@ export default Conversation;
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: scale(5),
+        marginBottom: verticalScale(5),
         width: '90%',
     },
     pOneContainer: {
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
     },
     alignContainer: {
         paddingHorizontal: scale(15),
-        paddingVertical: scale(7),
+        paddingVertical: verticalScale(7),
         borderTopLeftRadius: scale(20),
         borderTopRightRadius: scale(20)
     },
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
     },
     dateInfo: {
         fontSize: moderateScale(13),
-        marginTop: scale(1)
+        marginTop: verticalScale(1)
     },
     pOneDateInfo: {
         color: Colors.primaryShadow
