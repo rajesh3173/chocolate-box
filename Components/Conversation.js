@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
 import { moderateScale, scale, verticalScale } from "../Context/scales";
 
-const Conversation = ({ who, text, dateIn, timeIn}) => {
+const Conversation = ({ who, text, dateIn, timeIn }) => {
 
     const [tmVisiable, setTmVisiable] = useState(false);
 
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: scale(20)
     },
     pTwoAlignCon: {
-        backgroundColor: Colors.secondary800,
+        backgroundColor: Colors.secondary500,
         borderBottomRightRadius: scale(20)
     },
     textContainer: {
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto'
     },
     pTwoText: {
-        color: Colors.secondaryText,
+        color: Colors.secondary800,
         marginRight: 'auto'
     },
     dateInfo: {
@@ -75,13 +75,13 @@ const styles = StyleSheet.create({
         marginTop: verticalScale(1)
     },
     pOneDateInfo: {
-        color: Colors.primaryShadow
+        color: Colors.Primary400
     },
     pTwoDateInfo: {
-        color: Colors.secondaryShadow
+        color: Colors.secondary700
     },
     timeInfo: {
-        color: Colors.backgroundShadow,
+        color: Colors.secondary400,
         fontSize: moderateScale(12)
     }
 });
