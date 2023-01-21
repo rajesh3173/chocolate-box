@@ -3,6 +3,7 @@ import { Button, FlatList, Pressable, StyleSheet, Text, View } from "react-nativ
 import FileCard from "../Components/FileCard";
 import SelectMetaData from "../Components/popUps/SelectMetaData";
 import Colors from "../Constants/colors";
+import { addItemInStore, clearStoreHandler, getStoreKeysHandler } from "../Context/asyncStrore";
 import { FileInfoContext } from "../Context/fileInfoContext";
 import { documentPicker, fileReader } from "../Context/localFile";
 import { scale, verticalScale, moderateScale } from "../Context/scales";
@@ -97,6 +98,23 @@ const Dashboard = () => {
         setMetaPopUp(!metaPopUp);
     }
 
+    // const addInStore = () => {
+    //     console.log("add clicked");
+    //     var item = {}
+    //     item["fileName"] = "f3";
+    //     item["otherKeys"] = "otherValues"
+    //     addItemInStore(item);
+    // }
+
+    const getStore = () => {
+        console.log("get clicked");
+        getStoreKeysHandler();
+    }
+    const removeStore = () => {
+        console.log("remove clicked")
+        clearStoreHandler()
+    }
+
     return (
         fileInfoCtx.fileInfoList && (
             <View style={styles.container}>
@@ -111,6 +129,15 @@ const Dashboard = () => {
                         <Text style={styles.addNewButtonText}>+ Add New Chat</Text>
                     </Pressable>
                 </View>
+
+
+
+                {/* <Button title="addInStore" onPress={addInStore}/> */}
+                <Button title="getStore" onPress={getStore}/>
+                <Button title="removeStore" onPress={removeStore}/>
+
+
+                
                 <View style={styles.chatFilesCon}>
                     <FlatList data={fileInfoCtx.fileInfoList} renderItem={(infoCon) => {
                         return (
