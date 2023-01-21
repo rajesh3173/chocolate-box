@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Button, Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import Colors from "../../Constants/colors";
+import { addItemInStore } from "../../Context/asyncStrore";
 import { FileInfoContext } from "../../Context/fileInfoContext";
 import { moderateScale, scale, verticalScale } from "../../Context/scales";
 import CustomButton from "../CustomButton";
@@ -32,7 +33,7 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => 
         popUphandler();
     }
 
-    const continueHandler = () => {
+    const continueHandler = async () => {
         let fileAll = fileInfo;
         const ref1 = fileInfo["personOne"]
         const ref2 = fileInfo["personTwo"]
@@ -42,6 +43,7 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => 
         }
         fileAll["fileName"] = chatName;
         fileInfoCtx.addFileInfo(fileAll);
+        await addItemInStore(fileAll);
         cancelHandler();
     }
 
