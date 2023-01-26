@@ -15,12 +15,18 @@ const Dashboard = () => {
     const [metaPopUp, setMetaPopUp] = useState(false);
     const [fileInfoAll, setFileInfoAll] = useState({});
 
+    const [errorOccur, setErrorOccur] = useState(false);
+
     const getMetaData = async (info) => {
         let pickedFileInfo = {};
         const chatFile = await fileReader(info.uri);
+        if (chatFile == null) {
+            return null;
+        }
         const initialArray = chatFile.split("\n");
-        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - /;
-        let ind = initialArray[0].search("Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more") != -1 ? 1 : 0;
+        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - (?:\w|\W)+: /;
+        // let ind = initialArray[0].search("Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more") != -1 ? 1 : 0;
+        let ind = 0;
         let lastInd = initialArray.length;
 
         let chageDate = false;
@@ -52,7 +58,7 @@ const Dashboard = () => {
             if (pattern.test(initialArray[ind])) {
                 const firstChatDet = initialArray[ind].split(": ");
                 const firstChatDes = firstChatDet[1];
-                pickedFileInfo["description"] = firstChatDes.length > 12 ? firstChatDes.slice(0, 9).trim() + "...." : firstChatDes;
+                pickedFileInfo["description"] = firstChatDes.length > 20 ? firstChatDes.slice(0, 16).trim() + "...." : firstChatDes;
                 const chatDet = firstChatDet[0].split(" - ");
                 pickedFileInfo["personOne"] = chatDet[1];
                 const chatdate = chatDet[0].split(", ");
@@ -77,21 +83,29 @@ const Dashboard = () => {
         while (true) {
             if (pattern.test(initialArray[ind])) {
                 const chatDet = initialArray[ind].split(": ")[0];
-                if (!chatDet.includes(pickedFileInfo["personOne"])) {
-                    pickedFileInfo["personTwo"] = chatDet.split(" - ")[1];
-                    break;
-                }
+                pickedFileInfo["personTwo"] = chatDet.split(" - ")[1];
+                break;
             }
             ind = ind + 1;
         }
 
         setFileInfoAll(pickedFileInfo);
+        return 1;
     }
 
     const addNewHandler = async () => {
         const info = await documentPicker();
-        await getMetaData(info);
-        metaDataPopUpHandler();
+        if (info == null) {
+            setErrorOccur(true);
+        } else if (info.type == "success") {
+            let metD = await getMetaData(info);
+            if (metD == null) {
+                setErrorOccur(true);
+            } else {
+                metaDataPopUpHandler();
+            }
+        }
+
     }
 
     const metaDataPopUpHandler = () => {
@@ -115,6 +129,10 @@ const Dashboard = () => {
         clearStoreHandler()
     }
 
+    if (errorOccur) {
+        console.log("error occured while picking doc 1")
+    }
+
     return (
         fileInfoCtx.fileInfoList && (
             <View style={styles.container}>
@@ -122,6 +140,7 @@ const Dashboard = () => {
                     popUphandler={metaDataPopUpHandler}
                     fileInfo={fileInfoAll}
                     setFileInfoAll={setFileInfoAll}
+                    errorHandler={setErrorOccur}
                 />
                 <View style={styles.headerSection}>
                     <Text style={styles.headerText}>All Chats</Text>
@@ -133,11 +152,11 @@ const Dashboard = () => {
 
 
                 {/* <Button title="addInStore" onPress={addInStore}/> */}
-                <Button title="getStore" onPress={getStore}/>
-                <Button title="removeStore" onPress={removeStore}/>
+                <Button title="getStore" onPress={getStore} />
+                <Button title="removeStore" onPress={removeStore} />
 
 
-                
+
                 <View style={styles.chatFilesCon}>
                     <FlatList data={fileInfoCtx.fileInfoList} renderItem={(infoCon) => {
                         return (

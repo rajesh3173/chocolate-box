@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Button, Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import Colors from "../../Constants/colors";
 import { addItemInStore } from "../../Context/asyncStrore";
 import { FileInfoContext } from "../../Context/fileInfoContext";
@@ -7,20 +7,24 @@ import { moderateScale, scale, verticalScale } from "../../Context/scales";
 import CustomButton from "../CustomButton";
 import RadioButton from "../RadioButton";
 
-const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => {
+const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, errorHandler }) => {
 
     const fileInfoCtx = useContext(FileInfoContext);
 
-    const [radioO, setRadioO] = useState();
-    const [radioT, setRadioT] = useState();
+    const [radioO, setRadioO] = useState(false);
+    const [radioT, setRadioT] = useState(false);
     const [chatName, setChatName] = useState("");
+    const [isKeyPresent, setIsKeyPresent] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false)
 
     const firstRadioHandler = () => {
+        setIsEmpty(false);
         setRadioT(false);
         setRadioO(true);
     }
 
     const secondRadioHandler = () => {
+        setIsEmpty(false);
         setRadioO(false);
         setRadioT(true);
     }
@@ -31,6 +35,8 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => 
         setChatName("");
         setFileInfoAll({});
         popUphandler();
+        setIsEmpty(false);
+        setIsKeyPresent(false);
     }
 
     const continueHandler = async () => {
@@ -41,10 +47,37 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => 
             fileAll["personOne"] = ref2;
             fileAll["personTwo"] = ref1;
         }
-        fileAll["fileName"] = chatName;
-        fileInfoCtx.addFileInfo(fileAll);
-        await addItemInStore(fileAll);
+        fileAll["fileName"] = chatName.trim();
+        let stat = await addItemInStore(fileAll);
+        if (stat == "fail") {
+            errorHandler(true);
+        } else if( stat == "ok"){
+            fileInfoCtx.addFileInfo(fileAll);
+            fileInfoCtx.addFileKey(fileAll["fileName"]);
+        }
         cancelHandler();
+    }
+
+    const checkHandler = () => {
+        if (chatName.trim().length > 0 && (radioO || radioT)) {
+            if (fileInfoCtx.fileKeys.includes(chatName.trim())) {
+                setIsKeyPresent(true);
+            } else {
+                continueHandler();
+            }
+        } else {
+            setIsEmpty(true);
+        }
+    }
+
+    const inputTextHandler = (text) =>{
+        setChatName(text)
+        setIsEmpty(false)
+        if (fileInfoCtx.fileKeys.includes(text.trim())) {
+            setIsKeyPresent(true)
+        } else {
+        setIsKeyPresent(false)
+        }
     }
 
     return (
@@ -52,22 +85,23 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => 
             <View style={styles.outerCon}>
                 <View style={styles.container}>
                     <View style={styles.headCon}>
-                        <Text style={styles.popHeading}>Heading</Text>
+                        <Text style={styles.popHeading}>Chocolate Details</Text>
                     </View>
                     <View style={styles.innerContainer}>
                         <View style={styles.subContainers}>
-                            <Text style={styles.fileHead}>ChatName:</Text>
+                            <Text style={styles.fileHead}>Chocolate Name:</Text>
                             <View>
                                 <TextInput
                                     style={styles.fileNameTest}
-                                    placeholder="Give Unique ChatName"
+                                    placeholder="Give Unique Chocolate Name"
                                     color={Colors.secondary900}
-                                    maxLength={12}
+                                    maxLength={10}
                                     selectionColor={Colors.secondary900}
                                     autoCorrect={false}
-                                    onChangeText={(text) => { setChatName(text) }}
+                                    onChangeText={(text) => { inputTextHandler(text) }}
                                     value={chatName}
                                 />
+                                { isKeyPresent && <Text style={styles.keyPresentError}>Chocolate Name Exists</Text>}
                             </View>
                         </View>
                         <View style={styles.subContainers}>
@@ -75,12 +109,14 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll }) => 
                             <View >
                                 <RadioButton onClick={firstRadioHandler} selected={radioO}>{fileInfo.personOne}</RadioButton>
                                 <RadioButton onClick={secondRadioHandler} selected={radioT}>{fileInfo.personTwo}</RadioButton>
-
                             </View>
+                        </View>
+                        <View>
+                            {isEmpty && <Text style={styles.keyPresentError}>Fill Chocolate Details</Text>}
                         </View>
                         <View style={[styles.subContainers, styles.buttonCon]}>
                             <CustomButton onSelect={cancelHandler}>CANCEL</CustomButton>
-                            <CustomButton onSelect={continueHandler}>CONTINUE</CustomButton>
+                            <CustomButton onSelect={checkHandler}>CONTINUE</CustomButton>
                         </View>
                     </View>
                 </View>
@@ -143,6 +179,13 @@ const styles = StyleSheet.create({
         borderRadius: scale(10),
         borderWidth: scale(1),
         borderColor: Colors.secondary700,
+    },
+    keyPresentError: {
+        color: Colors.errorText,
+        fontSize: moderateScale(13),
+        paddingTop: scale(3),
+        // backgroundColor: 'pink',
+        textAlign: 'center'
     },
     buttonCon: {
         flexDirection: 'row',

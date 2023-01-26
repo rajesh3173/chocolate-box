@@ -17,9 +17,15 @@ const Root = () => {
     let keys = [];
     const getKeys = async () => {
       keys = await getStoreKeysHandler();
+      if (keys == null) {
+        return ;
+      }
       for (let i = 0; i < keys.length; i++) {
-        let fi = await getFileInfoFromStore(keys[i]); 
-        fileInfoCtx.addFileInfo(fi);
+        let fi = await getFileInfoFromStore(keys[i]);
+        if (fi != null){
+          fileInfoCtx.addFileKey(keys[i]);
+          fileInfoCtx.addFileInfo(fi);
+        }
       }
     }
     getKeys();

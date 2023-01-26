@@ -3,12 +3,18 @@ import { createContext, useState } from "react";
 export const FileInfoContext = createContext({
     fileInfoList: [],
     addFileInfo: (fileInfo) => { },
-    removeFileInfo: (fileInfo) => { }
+    removeFileInfo: (fileInfo) => { },
+
+    fileKeys: [],
+    addFileKey: (filekey) => { },
+    removeFileKey: (filekey) => { }
 });
 
 const FileInfoContextProvider = ({ children }) => {
 
     const [fileInfoList, setFileInfoList] = useState([]);
+
+    const [fileKeys, setFileKeys] = useState([]);
 
     const addFileInfo = (fileInfo) => {
         setFileInfoList((currentFileInfos) => [fileInfo, ...currentFileInfos]);
@@ -18,10 +24,22 @@ const FileInfoContextProvider = ({ children }) => {
         setFileInfoList((currentFileInfos) => currentFileInfos.filter((currentFileInfo) => currentFileInfo != fileInfo));
     }
 
+    const addFileKey = (fileKey) => {
+        setFileKeys((currentFileKeys) => [fileKey, ...currentFileKeys]);
+    }
+
+    const removeFileKey = (fileKey) => {
+        setFileKeys((currentFileKeys) => currentFileKeys.filter((currentFileKey)=> currentFileKey != fileKey));
+    }
+
     const value = {
         fileInfoList: fileInfoList,
         addFileInfo: addFileInfo,
-        removeFileInfo: removeFileInfo
+        removeFileInfo: removeFileInfo,
+
+        fileKeys: fileKeys,
+        addFileKey: addFileKey,
+        removeFileKey: removeFileKey
     }
 
     return (

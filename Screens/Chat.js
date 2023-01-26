@@ -20,10 +20,17 @@ const Chat = ({ route, navigation }) => {
 
         const initialArray = chatFile.split("\n");
         const arrayLength = initialArray.slice(-1) == "" ? initialArray.length - 1 : initialArray.length;
-        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - /;
-        const initialIndex = initialArray[0].search("Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more") != -1 ? 1 : 0;
-
-        resultArray.push(initialArray[initialIndex]);
+        const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - (?:\w|\W)+: /;
+        let initialIndex = 0;
+        while (true) {
+            // console.log(initialArray[initialIndex]);
+            if (pattern.test(initialArray[initialIndex])) {
+                resultArray.push(initialArray[initialIndex]);
+                // console.log(initialIndex)
+                break;
+            }
+            initialIndex = initialIndex + 1;
+        }
 
         for (let i = initialIndex + 1; i < arrayLength; i++) {
             if (pattern.test(initialArray[i])) {
@@ -38,13 +45,12 @@ const Chat = ({ route, navigation }) => {
 
     useEffect(() => {
         const readingHandler = async (fileUri) => {
-            try {
-                const chatFile = await fileReader(fileUri);
+            const chatFile = await fileReader(fileUri);
+            if (chatFile == null) {
+                setErrorOccur(true);
+            } else {
                 const chatCon = arrangeArray(chatFile);
                 setChatArray(chatCon);
-            } catch (error) {
-                console.log(error);
-                setErrorOccur(true);
             }
         }
         readingHandler(fileUri);
@@ -57,7 +63,6 @@ const Chat = ({ route, navigation }) => {
     }, [fileUri, personTwo]);
 
     if (errorOccur) {
-
         return (
             <View style={styles.errorContainer} >
                 <Text style={styles.errorText} >Ooops....! Error while fetching chat....</Text>
