@@ -1,12 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const addItemInStore = async (item) => {
+    let stat = "";
     try {
         const jsonValue = JSON.stringify(item)
         await AsyncStorage.setItem(item["fileName"], jsonValue);
+        stat = "ok";
     } catch (e) {
         console.log(e)
+        stat = "fail";
     }
+    
+    return stat;
 }
 
 const getStoreKeysHandler = async () => {
@@ -15,25 +20,31 @@ const getStoreKeysHandler = async () => {
         keys = await AsyncStorage.getAllKeys();
     } catch (e) {
         console.log(e)
+        keys = null;
     }
-    console.log(keys);
-    return keys
+    return keys;
 }
 
 const getFileInfoFromStore = async (key) => {
+    let data = "";
     try {
         const itemString = await AsyncStorage.getItem(key);
-        return JSON.parse(itemString)
+        data = JSON.parse(itemString);
+        // console.log(data)
     } catch (e) {
         console.log(e);
+        data = null;
     }
+    return data;
 }
 
 const clearStoreHandler = async () => {
     let keys = []
     try {
         keys = await AsyncStorage.getAllKeys();
-        await AsyncStorage.multiRemove(keys)
+        if (keys.length != 0) {
+            await AsyncStorage.multiRemove(keys)
+        }
     } catch (e) {
         console.log(e);
     }
