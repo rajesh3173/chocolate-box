@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Button, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import FileCard from "../Components/FileCard";
+import ErrorPopUp from "../Components/popUps/ErrorPopUp";
 import SelectMetaData from "../Components/popUps/SelectMetaData";
 import Colors from "../Constants/colors";
 import { addItemInStore, clearStoreHandler, getStoreKeysHandler } from "../Context/asyncStrore";
@@ -16,6 +17,7 @@ const Dashboard = () => {
     const [fileInfoAll, setFileInfoAll] = useState({});
 
     const [errorOccur, setErrorOccur] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("Error Occured While Reading Chocolate");
 
     const getMetaData = async (info) => {
         let pickedFileInfo = {};
@@ -96,10 +98,12 @@ const Dashboard = () => {
     const addNewHandler = async () => {
         const info = await documentPicker();
         if (info == null) {
+            setErrorMsg("Error Occured While Picking Chocolate");
             setErrorOccur(true);
         } else if (info.type == "success") {
             let metD = await getMetaData(info);
             if (metD == null) {
+                setErrorMsg("Error Occured While Reading Chocolate");
                 setErrorOccur(true);
             } else {
                 metaDataPopUpHandler();
@@ -129,10 +133,6 @@ const Dashboard = () => {
         clearStoreHandler()
     }
 
-    if (errorOccur) {
-        console.log("error occured while picking doc 1")
-    }
-
     return (
         fileInfoCtx.fileInfoList && (
             <View style={styles.container}>
@@ -141,6 +141,12 @@ const Dashboard = () => {
                     fileInfo={fileInfoAll}
                     setFileInfoAll={setFileInfoAll}
                     errorHandler={setErrorOccur}
+                    errorMsgHandler={setErrorMsg}
+                />
+                <ErrorPopUp visible={errorOccur}
+                message={errorMsg}
+                errorHandler={setErrorOccur}
+                errorMsgHandler={setErrorMsg}
                 />
                 <View style={styles.headerSection}>
                     <Text style={styles.headerText}>All Chats</Text>

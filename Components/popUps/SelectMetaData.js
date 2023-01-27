@@ -7,7 +7,7 @@ import { moderateScale, scale, verticalScale } from "../../Context/scales";
 import CustomButton from "../CustomButton";
 import RadioButton from "../RadioButton";
 
-const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, errorHandler }) => {
+const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, errorHandler, errorMsgHandler }) => {
 
     const fileInfoCtx = useContext(FileInfoContext);
 
@@ -50,6 +50,7 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, error
         fileAll["fileName"] = chatName.trim();
         let stat = await addItemInStore(fileAll);
         if (stat == "fail") {
+            errorMsgHandler("Error Occured While Storing Chocolate")
             errorHandler(true);
         } else if( stat == "ok"){
             fileInfoCtx.addFileInfo(fileAll);
@@ -115,8 +116,8 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, error
                             {isEmpty && <Text style={styles.keyPresentError}>Fill Chocolate Details</Text>}
                         </View>
                         <View style={[styles.subContainers, styles.buttonCon]}>
-                            <CustomButton onSelect={cancelHandler}>CANCEL</CustomButton>
-                            <CustomButton onSelect={checkHandler}>CONTINUE</CustomButton>
+                            <CustomButton onSelect={cancelHandler} status = "no">CANCEL</CustomButton>
+                            <CustomButton onSelect={checkHandler} status = "ok">CONTINUE</CustomButton>
                         </View>
                     </View>
                 </View>
