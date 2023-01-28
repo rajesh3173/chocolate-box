@@ -1,19 +1,70 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import Conversation from "../Components/Conversation";
+import ChatMenu from "../Components/popUps/ChatMenu";
 import Colors from "../Constants/colors";
 import { fileReader } from "../Context/localFile";
 import { moderateScale, scale, verticalScale } from "../Context/scales";
+import { AntDesign } from '@expo/vector-icons';
+import DeleteConform from "../Components/popUps/DeleteConform";
+import { FileInfoContext } from "../Context/fileInfoContext";
+import ErrorPopUp from "../Components/popUps/ErrorPopUp";
+import { removeOneFile } from "../Context/asyncStrore";
 
 const Chat = ({ route, navigation }) => {
 
-    const fileUri = route.params.fileUri;
-    const personOne = route.params.personOne;
-    const personTwo = route.params.personTwo;
-    const endYr = route.params.endDate.split(" ")[3];
+    const fileInfoCtx = useContext(FileInfoContext);
+
+    const fileInf = route.params.fileInf;
+
+    const fileUri = fileInf["filePath"]
+    const personOne = fileInf["personOne"]
+    const personTwo = fileInf["personTwo"]
+    const endYr = fileInf["endDate"].split(" ")[3];
 
     const [chatArray, setChatArray] = useState();
     const [errorOccur, setErrorOccur] = useState(false);
+    const [deleteError, setDeleteError] = useState(false);
+    const [deleteErrorMsg, setDeleteErrorMsg] = useState("");
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDeletePopOpen, setIsDeletePopOpen] = useState(false);
+
+    useEffect(() => {
+        const readingHandler = async (fileUri) => {
+            const chatFile = await fileReader(fileUri);
+            if (chatFile == null) {
+                setErrorOccur(true);
+            } else {
+                const chatCon = arrangeArray(chatFile);
+                setChatArray(chatCon);
+            }
+        }
+        readingHandler(fileUri);
+    }, [fileUri]);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: personTwo
+        });
+    }, [fileUri, personTwo]);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return (
+                    <Pressable onPress={menuHandler}>
+                        <View style={styles.menuCon}>
+                            <AntDesign name="menu-unfold" size={moderateScale(24)} color="white" />
+                        </View>
+                    </Pressable>
+                );
+            }
+        })
+    }, [navigation, menuHandler]);
+
+    const menuHandler = () => {
+        setIsMenuOpen(!isMenuOpen);
+    }
 
     const arrangeArray = (chatFile) => {
         let resultArray = [];
@@ -43,24 +94,17 @@ const Chat = ({ route, navigation }) => {
         return resultArray;
     }
 
-    useEffect(() => {
-        const readingHandler = async (fileUri) => {
-            const chatFile = await fileReader(fileUri);
-            if (chatFile == null) {
-                setErrorOccur(true);
-            } else {
-                const chatCon = arrangeArray(chatFile);
-                setChatArray(chatCon);
-            }
+    const deleteChatHandler = async () => {
+        let stat = await removeOneFile(fileInf["fileName"]);
+        if (stat == "ok") {
+            fileInfoCtx.removeFileKey(fileInf["fileName"]);
+            fileInfoCtx.removeFileInfo(fileInf);
+            navigation.navigate('Dashboard')
+        } else {
+            setDeleteErrorMsg("Error Occured While removing Chocolate");
+            setDeleteError(true);
         }
-        readingHandler(fileUri);
-    }, [fileUri]);
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            title: personTwo
-        });
-    }, [fileUri, personTwo]);
+    }
 
     if (errorOccur) {
         return (
@@ -72,6 +116,21 @@ const Chat = ({ route, navigation }) => {
 
     return (
         chatArray && (<View style={styles.container}>
+            <ChatMenu visible={isMenuOpen}
+                menuHandler={menuHandler}
+                deletePopHandler={setIsDeletePopOpen}
+            />
+            <DeleteConform visible={isDeletePopOpen}
+                head="Remove Chocolate?"
+                message="Click continue to Remove Chocolate"
+                closeHandler={setIsDeletePopOpen}
+                deleteHandler={deleteChatHandler}
+            />
+            <ErrorPopUp visible={deleteError}
+                message={deleteErrorMsg}
+                errorHandler={setDeleteError}
+                errorMsgHandler={setDeleteErrorMsg}
+            />
             <FlatList style={styles.flatListContaner} data={chatArray} renderItem={(chat) => {
                 let itemArray = chat.item.split(": ");
                 if (itemArray.length > 2) {
@@ -111,6 +170,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingBottom: scale(3)
+    },
+    menuCon: {
+        paddingLeft: scale(15),
+        paddingVertical: scale(10),
     },
     flatListContaner: {
         paddingHorizontal: scale(12),
