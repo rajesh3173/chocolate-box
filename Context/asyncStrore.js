@@ -40,14 +40,30 @@ const getFileInfoFromStore = async (key) => {
 
 const clearStoreHandler = async () => {
     let keys = []
+    let stat = ""
     try {
         keys = await AsyncStorage.getAllKeys();
         if (keys.length != 0) {
-            await AsyncStorage.multiRemove(keys)
+            await AsyncStorage.multiRemove(keys);
         }
+        stat = "ok"
     } catch (e) {
+        stat = "fail"
         console.log(e);
     }
+    return stat;
 }
 
-export { addItemInStore, getStoreKeysHandler, getFileInfoFromStore, clearStoreHandler };
+const removeOneFile = async (fileKey) => {
+    let stat = "";
+    try {
+        await AsyncStorage.removeItem(fileKey);
+        stat = "ok"
+    } catch (e) {
+        stat = "fail"
+        console.log(e);
+    }
+    return stat;
+}
+
+export { addItemInStore, getStoreKeysHandler, getFileInfoFromStore, clearStoreHandler, removeOneFile };

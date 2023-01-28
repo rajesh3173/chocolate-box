@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { Button, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import FileCard from "../Components/FileCard";
 import ErrorPopUp from "../Components/popUps/ErrorPopUp";
@@ -8,16 +8,39 @@ import { addItemInStore, clearStoreHandler, getStoreKeysHandler } from "../Conte
 import { FileInfoContext } from "../Context/fileInfoContext";
 import { documentPicker, fileReader } from "../Context/localFile";
 import { scale, verticalScale, moderateScale } from "../Context/scales";
+import { AntDesign } from '@expo/vector-icons';
+import DashboardMenu from "../Components/popUps/DashboardMenu";
+import DeleteConform from "../Components/popUps/DeleteConform";
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }) => {
 
     const fileInfoCtx = useContext(FileInfoContext);
 
     const [metaPopUp, setMetaPopUp] = useState(false);
     const [fileInfoAll, setFileInfoAll] = useState({});
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDeletePopOpen, setIsDeletePopOpen] = useState(false);
 
     const [errorOccur, setErrorOccur] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("Error Occured While Reading Chocolate");
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const menuHandler = () => {
+        setIsMenuOpen(!isMenuOpen);
+    }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return (
+                    <Pressable onPress={menuHandler}>
+                        <View style={styles.menuCon}>
+                            <AntDesign name="menu-unfold" size={moderateScale(24)} color="white" />
+                        </View>
+                    </Pressable>
+                );
+            }
+        })
+    }, [navigation, menuHandler]);
 
     const getMetaData = async (info) => {
         let pickedFileInfo = {};
@@ -27,7 +50,6 @@ const Dashboard = () => {
         }
         const initialArray = chatFile.split("\n");
         const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - (?:\w|\W)+: /;
-        // let ind = initialArray[0].search("Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them. Tap to learn more") != -1 ? 1 : 0;
         let ind = 0;
         let lastInd = initialArray.length;
 
@@ -116,6 +138,16 @@ const Dashboard = () => {
         setMetaPopUp(!metaPopUp);
     }
 
+    const clearAllFilesHandler = async () => {
+        let stat = await clearStoreHandler();
+        if (stat == "ok") {
+            fileInfoCtx.removeAll();
+        } else {
+            setErrorOccur(true);
+            setErrorMsg("Error Occured While Cleaning The Box")
+        }
+    }
+
     // const addInStore = () => {
     //     console.log("add clicked");
     //     var item = {}
@@ -124,9 +156,10 @@ const Dashboard = () => {
     //     addItemInStore(item);
     // }
 
-    const getStore = () => {
-        console.log("get clicked");
-        getStoreKeysHandler();
+    const getStore = async () => {
+
+        console.log(await getStoreKeysHandler());
+        console.log(fileInfoCtx.fileKeys);
     }
     const removeStore = () => {
         console.log("remove clicked")
@@ -144,9 +177,19 @@ const Dashboard = () => {
                     errorMsgHandler={setErrorMsg}
                 />
                 <ErrorPopUp visible={errorOccur}
-                message={errorMsg}
-                errorHandler={setErrorOccur}
-                errorMsgHandler={setErrorMsg}
+                    message={errorMsg}
+                    errorHandler={setErrorOccur}
+                    errorMsgHandler={setErrorMsg}
+                />
+                <DashboardMenu visible={isMenuOpen}
+                    menuHandler={menuHandler}
+                    deletePopHandler={setIsDeletePopOpen}
+                />
+                <DeleteConform visible={isDeletePopOpen}
+                    head="Empty the Box?"
+                    message="Click continue to empty the box"
+                    closeHandler={setIsDeletePopOpen}
+                    deleteHandler={clearAllFilesHandler}
                 />
                 <View style={styles.headerSection}>
                     <Text style={styles.headerText}>All Chats</Text>
@@ -181,6 +224,10 @@ export default Dashboard;
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    menuCon: {
+        paddingLeft: scale(15),
+        paddingVertical: scale(10),
     },
     headerSection: {
         paddingHorizontal: scale(12),

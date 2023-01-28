@@ -9,6 +9,7 @@ const FileCard = ({ infoCon }) => {
 
     const goToChatHandler = () => {
         navigation.navigate('Chat', {
+            fileInf: infoCon,
             fileUri: infoCon.filePath,
             personOne: infoCon.personOne,
             personTwo: infoCon.personTwo,
