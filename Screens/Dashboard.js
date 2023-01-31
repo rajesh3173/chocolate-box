@@ -11,6 +11,8 @@ import { scale, verticalScale, moderateScale } from "../Context/scales";
 import { AntDesign } from '@expo/vector-icons';
 import DashboardMenu from "../Components/popUps/DashboardMenu";
 import DeleteConform from "../Components/popUps/DeleteConform";
+import FirstScreen from "../Components/FirstScreen";
+import LoadingSpinner from "../Components/LoadingSpinner";
 
 const Dashboard = ({ navigation }) => {
 
@@ -148,23 +150,19 @@ const Dashboard = ({ navigation }) => {
         }
     }
 
-    // const addInStore = () => {
-    //     console.log("add clicked");
-    //     var item = {}
-    //     item["fileName"] = "f3";
-    //     item["otherKeys"] = "otherValues"
-    //     addItemInStore(item);
-    // }
 
     const getStore = async () => {
 
         console.log(await getStoreKeysHandler());
+        console.log(fileInfoCtx.fileKeys.length);
         console.log(fileInfoCtx.fileKeys);
     }
-    const removeStore = () => {
-        console.log("remove clicked")
-        clearStoreHandler()
-    }
+
+    if (fileInfoCtx.isLoading) {
+        return(
+            <LoadingSpinner />
+        );
+    } 
 
     return (
         fileInfoCtx.fileInfoList && (
@@ -191,28 +189,38 @@ const Dashboard = ({ navigation }) => {
                     closeHandler={setIsDeletePopOpen}
                     deleteHandler={clearAllFilesHandler}
                 />
-                <View style={styles.headerSection}>
-                    <Text style={styles.headerText}>All Chats</Text>
-                    <Pressable onPress={addNewHandler} style={styles.addNewButton}>
-                        <Text style={styles.addNewButtonText}>+ Add New Chat</Text>
-                    </Pressable>
-                </View>
+
+                {
+                    fileInfoCtx.fileInfoList == 0 && (
+                        <FirstScreen visible={true} addNewHandler={addNewHandler}/>
+                    )
+                }
+                {
+                    fileInfoCtx.fileInfoList.length > 0 && (
+                        <View style={styles.container}>
+                            <View style={styles.headerSection}>
+                                <Text style={styles.headerText}>All Chocolates</Text>
+                                <Pressable onPress={addNewHandler} style={styles.addNewButton}>
+                                    <Text style={styles.addNewButtonText}>+ Add Chocolate</Text>
+                                </Pressable>
+                            </View>
 
 
 
-                {/* <Button title="addInStore" onPress={addInStore}/> */}
-                <Button title="getStore" onPress={getStore} />
-                <Button title="removeStore" onPress={removeStore} />
+                            {/* <Button title="getStore" onPress={getStore} /> */}
 
 
 
-                <View style={styles.chatFilesCon}>
-                    <FlatList data={fileInfoCtx.fileInfoList} renderItem={(infoCon) => {
-                        return (
-                            <FileCard infoCon={infoCon.item} />
-                        );
-                    }} />
-                </View>
+                            <View style={styles.chatFilesCon}>
+                                <FlatList data={fileInfoCtx.fileInfoList} renderItem={(infoCon) => {
+                                    return (
+                                        <FileCard infoCon={infoCon.item} />
+                                    );
+                                }} />
+                            </View>
+                        </View>
+                    )
+                }
             </View>
         )
 

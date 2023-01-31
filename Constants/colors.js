@@ -24,7 +24,7 @@ const Colors = {
     // popUp back
     popUpBack: "#262626",
     // Error text
-    errorText: "red",
+    errorText: "#b30000",
 }
 
 export default Colors;

@@ -16,6 +16,7 @@ const Root = () => {
   useEffect(() => {
     let keys = [];
     const getKeys = async () => {
+      fileInfoCtx.setLoading(true);
       keys = await getStoreKeysHandler();
       if (keys == null) {
         return ;
@@ -27,6 +28,7 @@ const Root = () => {
           fileInfoCtx.addFileInfo(fi);
         }
       }
+      fileInfoCtx.setLoading(false);
     }
     getKeys();
   }, []);
@@ -39,7 +41,7 @@ const Root = () => {
         contentStyle: { backgroundColor: Colors.backgroundAll }
       }}>
         <Stack.Screen name='Dashboard' component={Dashboard} options={{ title: "ChocolateBox" }} />
-        <Stack.Screen name='Chat' component={Chat} options={{ title: "Chat" }} />
+        <Stack.Screen name='Chat' component={Chat} />
       </Stack.Navigator>
     </NavigationContainer>
   );

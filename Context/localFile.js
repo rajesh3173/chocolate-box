@@ -8,7 +8,7 @@ const documentPicker = async () => {
     } catch (error) {
         data = null;
     }
-    
+
     return data;
 }
 
