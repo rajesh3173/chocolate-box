@@ -23,7 +23,7 @@ const ErrorPopUp =({visible, message, errorHandler, errorMsgHandler}) =>{
                         </View>
                         
                         <View style={[styles.subContainers, styles.buttonCon]}>
-                            <CustomButton onSelect={handleClose} status="ok">OK</CustomButton>
+                            <CustomButton onSelect={handleClose} backColor={Colors.secondary900} textColor={Colors.secondary500}>OK</CustomButton>
                         </View>
                     </View>
                 </View>

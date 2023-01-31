@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto'
     },
     dateInfo: {
-        fontSize: moderateScale(13),
+        fontSize: moderateScale(12),
         marginTop: verticalScale(1)
     },
     pOneDateInfo: {

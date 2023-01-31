@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
 import { moderateScale, scale } from "../Context/scales";
@@ -16,13 +17,27 @@ const FileCard = ({ infoCon }) => {
             endDate: infoCon.endDate
         })
     }
-
+    // infoCon.fileName.slice(0,2).toUpperCase()
+    // let name = infoCon.fileName.split(" ");
+    //                         // console.log(name);
+    //                         let l = "";
+    //                         if (name.length>0) {
+    //                             l = name[1][0];
+    //                         }
+    //                         l = name[0][0]+l;
+    //                         return l.toUpperCase();
     return (
         <Pressable onPress={goToChatHandler}>
             <View style={styles.container}>
                 <View style={styles.iconDetCon}>
                     <View style={styles.iconCon}>
-                        <Text style={styles.iconText}>RK</Text>
+                        <Text style={styles.iconText}>
+                            {
+                                infoCon.fileName.split(" ").length > 1 ?
+                                    infoCon.fileName[0].toUpperCase() + infoCon.fileName.split(" ")[1][0].toUpperCase() :
+                                    infoCon.fileName[0].toUpperCase()
+                            }
+                        </Text>
                     </View>
                     <View style={styles.detaCon}>
                         <Text style={styles.fileName}>{infoCon.fileName}</Text>

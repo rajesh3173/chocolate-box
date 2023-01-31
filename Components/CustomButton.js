@@ -2,13 +2,13 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
 import { scale } from "../Context/scales";
 
-const CustomButton = ({ children, onSelect, status }) => {
+const CustomButton = ({ children, onSelect, backColor, textColor }) => {
 
     return (
-        <View style={[styles.container, status == "ok" ? { backgroundColor: Colors.secondary900 } : { backgroundColor: Colors.secondary500 }]}>
+        <View style={[styles.container, { backgroundColor: backColor }]}>
             <Pressable onPress={onSelect}>
                 <View style={styles.pressContainer}>
-                    <Text style={[styles.childrenText, status == "ok" ? { color: Colors.secondary500 } : { color: Colors.secondary900 }]}>{children}</Text>
+                    <Text style={[styles.childrenText, { color: textColor }]}>{children}</Text>
                 </View>
             </Pressable>
         </View>

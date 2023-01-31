@@ -32,8 +32,8 @@ const DeleteConform =({visible, message, closeHandler, deleteHandler, head}) =>{
                         </View>
                         
                         <View style={[styles.subContainers, styles.buttonCon]}>
-                        <CustomButton onSelect={cancelHandler} status = "no">CANCEL</CustomButton>
-                            <CustomButton onSelect={continueHandler} status="ok">CONTINUE</CustomButton>
+                        <CustomButton onSelect={cancelHandler} backColor={Colors.secondary500} textColor={Colors.secondary900}>CANCEL</CustomButton>
+                            <CustomButton onSelect={continueHandler} backColor={Colors.secondary900} textColor={Colors.secondary500}>CONTINUE</CustomButton>
                         </View>
                     </View>
                 </View>

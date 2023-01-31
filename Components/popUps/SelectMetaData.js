@@ -116,8 +116,8 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, error
                             {isEmpty && <Text style={styles.keyPresentError}>Fill Chocolate Details</Text>}
                         </View>
                         <View style={[styles.subContainers, styles.buttonCon]}>
-                            <CustomButton onSelect={cancelHandler} status = "no">CANCEL</CustomButton>
-                            <CustomButton onSelect={checkHandler} status = "ok">CONTINUE</CustomButton>
+                            <CustomButton onSelect={cancelHandler} backColor={Colors.secondary500} textColor={Colors.secondary900}>CANCEL</CustomButton>
+                            <CustomButton onSelect={checkHandler} backColor={Colors.secondary900} textColor={Colors.secondary500}>CONTINUE</CustomButton>
                         </View>
                     </View>
                 </View>

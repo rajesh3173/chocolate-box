@@ -110,6 +110,9 @@ const Chat = ({ route, navigation }) => {
         return (
             <View style={styles.errorContainer} >
                 <Text style={styles.errorText} >Ooops....! Error while fetching chat....</Text>
+                <Pressable onPress={deleteChatHandler}>
+                    <Text style={styles.errorTextDelete}>Click Here To Remove This Chocolate</Text>
+                </Pressable>
             </View>
         );
     }
@@ -186,6 +189,11 @@ const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: moderateScale(16),
-        color: Colors.errorText
+        color: Colors.errorText,
+        marginBottom: verticalScale(20)
+    },
+    errorTextDelete:{
+        fontSize: moderateScale(16),
+        color: Colors.secondary900
     }
 });
