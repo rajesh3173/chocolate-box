@@ -1,10 +1,10 @@
 import { useContext, useLayoutEffect, useState } from "react";
-import { Button, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import FileCard from "../Components/FileCard";
 import ErrorPopUp from "../Components/popUps/ErrorPopUp";
 import SelectMetaData from "../Components/popUps/SelectMetaData";
 import Colors from "../Constants/colors";
-import { addItemInStore, clearStoreHandler, getStoreKeysHandler } from "../Context/asyncStrore";
+import { clearStoreHandler, getStoreKeysHandler } from "../Context/asyncStrore";
 import { FileInfoContext } from "../Context/fileInfoContext";
 import { documentPicker, fileReader } from "../Context/localFile";
 import { scale, verticalScale, moderateScale } from "../Context/scales";
@@ -150,19 +150,11 @@ const Dashboard = ({ navigation }) => {
         }
     }
 
-
-    const getStore = async () => {
-
-        console.log(await getStoreKeysHandler());
-        console.log(fileInfoCtx.fileKeys.length);
-        console.log(fileInfoCtx.fileKeys);
-    }
-
     if (fileInfoCtx.isLoading) {
-        return(
+        return (
             <LoadingSpinner />
         );
-    } 
+    }
 
     return (
         fileInfoCtx.fileInfoList && (
@@ -192,7 +184,7 @@ const Dashboard = ({ navigation }) => {
 
                 {
                     fileInfoCtx.fileInfoList == 0 && (
-                        <FirstScreen visible={true} addNewHandler={addNewHandler}/>
+                        <FirstScreen visible={true} addNewHandler={addNewHandler} />
                     )
                 }
                 {
@@ -204,13 +196,6 @@ const Dashboard = ({ navigation }) => {
                                     <Text style={styles.addNewButtonText}>+ Add Chocolate</Text>
                                 </Pressable>
                             </View>
-
-
-
-                            {/* <Button title="getStore" onPress={getStore} /> */}
-
-
-
                             <View style={styles.chatFilesCon}>
                                 <FlatList data={fileInfoCtx.fileInfoList} renderItem={(infoCon) => {
                                     return (

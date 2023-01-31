@@ -1,15 +1,9 @@
-import { useContext } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import Colors from "../../Constants/colors";
-import { clearStoreHandler } from "../../Context/asyncStrore";
-import { FileInfoContext } from "../../Context/fileInfoContext";
 import { moderateScale, scale, verticalScale } from "../../Context/scales";
 import CustomButton from "../CustomButton";
 
-const DeleteConform =({visible, message, closeHandler, deleteHandler, head}) =>{
-
-    const fileInfoCtx = useContext(FileInfoContext);
-
+const DeleteConform = ({ visible, message, closeHandler, deleteHandler, head }) => {
 
     const cancelHandler = () => {
         closeHandler(false);
@@ -18,7 +12,7 @@ const DeleteConform =({visible, message, closeHandler, deleteHandler, head}) =>{
         await deleteHandler();
         cancelHandler();
     }
-    
+
     return (
         <Modal visible={visible} animationType="fade" statusBarTranslucent={true} transparent={true}>
             <View style={styles.outerCon}>
@@ -30,9 +24,9 @@ const DeleteConform =({visible, message, closeHandler, deleteHandler, head}) =>{
                         <View style={styles.subContainers}>
                             <Text>{message}</Text>
                         </View>
-                        
+
                         <View style={[styles.subContainers, styles.buttonCon]}>
-                        <CustomButton onSelect={cancelHandler} backColor={Colors.secondary500} textColor={Colors.secondary900}>CANCEL</CustomButton>
+                            <CustomButton onSelect={cancelHandler} backColor={Colors.secondary500} textColor={Colors.secondary900}>CANCEL</CustomButton>
                             <CustomButton onSelect={continueHandler} backColor={Colors.secondary900} textColor={Colors.secondary500}>CONTINUE</CustomButton>
                         </View>
                     </View>
@@ -53,9 +47,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
-        // flex: 1,
         borderRadius: scale(20),
-        // alignItems: "center",
         backgroundColor: Colors.backgroundAll,
         width: "75%"
 
@@ -80,7 +72,6 @@ const styles = StyleSheet.create({
     },
     subContainers: {
         paddingVertical: verticalScale(10),
-        // backgroundColor: 'red'
     },
     buttonCon: {
         flexDirection: 'row',

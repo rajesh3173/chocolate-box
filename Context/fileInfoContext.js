@@ -8,10 +8,10 @@ export const FileInfoContext = createContext({
     fileKeys: [],
     addFileKey: (filekey) => { },
     removeFileKey: (filekey) => { },
-    removeAll: ()=>{},
+    removeAll: () => { },
 
     isLoading: false,
-    setLoading: (status)=>{}
+    setLoading: (status) => { }
 });
 
 const FileInfoContextProvider = ({ children }) => {
@@ -35,7 +35,7 @@ const FileInfoContextProvider = ({ children }) => {
     }
 
     const removeFileKey = (fileKey) => {
-        setFileKeys((currentFileKeys) => currentFileKeys.filter((currentFileKey)=> currentFileKey != fileKey));
+        setFileKeys((currentFileKeys) => currentFileKeys.filter((currentFileKey) => currentFileKey != fileKey));
     }
 
     const removeAll = () => {

@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import Colors from "../Constants/colors";
 import { scale } from "../Context/scales";
 
 const CustomButton = ({ children, onSelect, backColor, textColor }) => {

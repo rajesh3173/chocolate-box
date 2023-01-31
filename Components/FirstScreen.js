@@ -1,12 +1,11 @@
-import { Button, Image, Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import Colors from "../Constants/colors";
 import { moderateScale, scale, verticalScale } from "../Context/scales";
-import { StatusBar } from 'expo-status-bar';
 import CustomButton from "./CustomButton";
 import ConversationImage from "./ConversationImage";
 
 const FirstScreen = ({ visible, addNewHandler }) => {
-    
+
     return (
         <Modal visible={visible} animationType="fade" statusBarTranslucent={true}>
             <View style={styles.container}>
@@ -54,46 +53,40 @@ const styles = StyleSheet.create({
         paddingHorizontal: scale(40)
     },
     headCon: {
-        // backgroundColor: 'yellow',
         justifyContent: 'center',
         alignItems: 'center',
-        // marginBottom: verticalScale(30)
     },
-    headText:{
+    headText: {
         fontSize: moderateScale(30),
         color: Colors.primaryText,
         fontWeight: '500',
         marginBottom: verticalScale(8),
     },
-    headDes:{
+    headDes: {
         fontSize: moderateScale(15),
         color: Colors.Primary400
     },
     imageCon: {
         width: scale(220),
         height: scale(240),
-        // backgroundColor: 'pink'
     },
     image: {
         width: '100%',
         height: '100%'
     },
     bottomContainer: {
-        // backgroundColor: 'orange',
         height: '35%',
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center'
     },
     bottomInnerContainer: {
-        // backgroundColor: 'yellow',
         width: '80%',
         padding: scale(20)
     },
     bottomInnerTextContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: 'pink'
     },
     bottomHeadText: {
         fontSize: moderateScale(18),
