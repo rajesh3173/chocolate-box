@@ -52,7 +52,7 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, error
         if (stat == "fail") {
             errorMsgHandler("Error Occured While Storing Chocolate")
             errorHandler(true);
-        } else if( stat == "ok"){
+        } else if (stat == "ok") {
             fileInfoCtx.addFileInfo(fileAll);
             fileInfoCtx.addFileKey(fileAll["fileName"]);
         }
@@ -71,13 +71,13 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, error
         }
     }
 
-    const inputTextHandler = (text) =>{
+    const inputTextHandler = (text) => {
         setChatName(text)
         setIsEmpty(false)
         if (fileInfoCtx.fileKeys.includes(text.trim())) {
             setIsKeyPresent(true)
         } else {
-        setIsKeyPresent(false)
+            setIsKeyPresent(false)
         }
     }
 
@@ -102,7 +102,7 @@ const SelectMetaData = ({ visible, popUphandler, fileInfo, setFileInfoAll, error
                                     onChangeText={(text) => { inputTextHandler(text) }}
                                     value={chatName}
                                 />
-                                { isKeyPresent && <Text style={styles.keyPresentError}>Chocolate Name Exists</Text>}
+                                {isKeyPresent && <Text style={styles.keyPresentError}>Chocolate Name Exists</Text>}
                             </View>
                         </View>
                         <View style={styles.subContainers}>
@@ -137,9 +137,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
-        // flex: 1,
         borderRadius: scale(20),
-        // alignItems: "center",
         backgroundColor: Colors.backgroundAll,
         width: "80%"
 
@@ -164,7 +162,6 @@ const styles = StyleSheet.create({
     },
     subContainers: {
         paddingVertical: verticalScale(10),
-        // backgroundColor: 'red'
     },
     fileHead: {
         fontSize: moderateScale(18),
@@ -185,7 +182,6 @@ const styles = StyleSheet.create({
         color: Colors.errorText,
         fontSize: moderateScale(13),
         paddingTop: scale(3),
-        // backgroundColor: 'pink',
         textAlign: 'center'
     },
     buttonCon: {

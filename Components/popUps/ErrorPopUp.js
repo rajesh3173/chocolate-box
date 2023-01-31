@@ -3,13 +3,13 @@ import Colors from "../../Constants/colors";
 import { moderateScale, scale, verticalScale } from "../../Context/scales";
 import CustomButton from "../CustomButton";
 
-const ErrorPopUp =({visible, message, errorHandler, errorMsgHandler}) =>{
+const ErrorPopUp = ({ visible, message, errorHandler, errorMsgHandler }) => {
 
-    const handleClose = () =>{
+    const handleClose = () => {
         errorMsgHandler("");
         errorHandler(false);
     }
-    
+
     return (
         <Modal visible={visible} animationType="fade" statusBarTranslucent={true} transparent={true}>
             <View style={styles.outerCon}>
@@ -21,7 +21,7 @@ const ErrorPopUp =({visible, message, errorHandler, errorMsgHandler}) =>{
                         <View style={styles.subContainers}>
                             <Text>{message}</Text>
                         </View>
-                        
+
                         <View style={[styles.subContainers, styles.buttonCon]}>
                             <CustomButton onSelect={handleClose} backColor={Colors.secondary900} textColor={Colors.secondary500}>OK</CustomButton>
                         </View>
@@ -43,9 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
-        // flex: 1,
         borderRadius: scale(20),
-        // alignItems: "center",
         backgroundColor: Colors.backgroundAll,
         width: "75%"
 
@@ -70,7 +68,6 @@ const styles = StyleSheet.create({
     },
     subContainers: {
         paddingVertical: verticalScale(10),
-        // backgroundColor: 'red'
     },
     buttonCon: {
         flexDirection: 'row',

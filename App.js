@@ -19,11 +19,12 @@ const Root = () => {
       fileInfoCtx.setLoading(true);
       keys = await getStoreKeysHandler();
       if (keys == null) {
-        return ;
+        fileInfoCtx.setLoading(false);
+        return;
       }
       for (let i = 0; i < keys.length; i++) {
         let fi = await getFileInfoFromStore(keys[i]);
-        if (fi != null){
+        if (fi != null) {
           fileInfoCtx.addFileKey(keys[i]);
           fileInfoCtx.addFileInfo(fi);
         }

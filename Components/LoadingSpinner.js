@@ -3,14 +3,14 @@ import { ActivityIndicator, Modal, StyleSheet, ImageBackground } from "react-nat
 const LoadingSpinner = () => {
     return (
         <Modal visible={true} animationType="none" statusBarTranslucent={true}>
-                <ImageBackground
-                    source={require('../assets/loadBack.png')}
-                    resizeMode="cover"
-                    style={styles.container}
-                    imageStyle={styles.backgroundimg}
-                >
-                    <ActivityIndicator size="large" color="#374562" />
-                </ImageBackground>
+            <ImageBackground
+                source={require('../assets/loadBack.png')}
+                resizeMode="cover"
+                style={styles.container}
+                imageStyle={styles.backgroundimg}
+            >
+                <ActivityIndicator size="large" color="#374562" />
+            </ImageBackground>
         </Modal>
     );
 }

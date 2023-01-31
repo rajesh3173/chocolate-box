@@ -74,10 +74,8 @@ const Chat = ({ route, navigation }) => {
         const pattern = /^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2} \w{2} - (?:\w|\W)+: /;
         let initialIndex = 0;
         while (true) {
-            // console.log(initialArray[initialIndex]);
             if (pattern.test(initialArray[initialIndex])) {
                 resultArray.push(initialArray[initialIndex]);
-                // console.log(initialIndex)
                 break;
             }
             initialIndex = initialIndex + 1;
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
         color: Colors.errorText,
         marginBottom: verticalScale(20)
     },
-    errorTextDelete:{
+    errorTextDelete: {
         fontSize: moderateScale(16),
         color: Colors.secondary900
     }

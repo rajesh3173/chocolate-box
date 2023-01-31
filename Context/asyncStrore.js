@@ -10,7 +10,7 @@ const addItemInStore = async (item) => {
         console.log(e)
         stat = "fail";
     }
-    
+
     return stat;
 }
 
@@ -30,7 +30,6 @@ const getFileInfoFromStore = async (key) => {
     try {
         const itemString = await AsyncStorage.getItem(key);
         data = JSON.parse(itemString);
-        // console.log(data)
     } catch (e) {
         console.log(e);
         data = null;
