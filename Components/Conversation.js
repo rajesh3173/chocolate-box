@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: scale(15),
         paddingVertical: verticalScale(7),
         borderTopLeftRadius: scale(20),
-        borderTopRightRadius: scale(20)
+        borderTopRightRadius: scale(20),
+        elevation: 3
     },
     pOneAlignCon: {
         backgroundColor: Colors.primary800,
