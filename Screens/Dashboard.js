@@ -181,7 +181,6 @@ const Dashboard = ({ navigation }) => {
                     closeHandler={setIsDeletePopOpen}
                     deleteHandler={clearAllFilesHandler}
                 />
-
                 {
                     fileInfoCtx.fileInfoList == 0 && (
                         <FirstScreen visible={true} addNewHandler={addNewHandler} />
