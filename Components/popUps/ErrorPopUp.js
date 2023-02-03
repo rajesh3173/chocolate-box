@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
         borderRadius: scale(20),
         backgroundColor: Colors.backgroundAll,
         width: "75%"
-
     },
     headCon: {
         paddingVertical: verticalScale(15),
@@ -64,7 +63,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingHorizontal: scale(30),
         paddingBottom: verticalScale(20),
-
     },
     subContainers: {
         paddingVertical: verticalScale(10),

@@ -15,13 +15,13 @@ const DashboardMenu = ({ visible, menuHandler, deletePopHandler }) => {
             <View style={styles.outerCon}>
                 <View style={styles.container}>
                     <View style={styles.textCon}>
-                        <View style={styles.singleTextOutCon}>
+                        <View>
                             <Pressable onPress={deletePop}>
                                 <Text style={styles.menuText}>Delete All</Text>
                             </Pressable>
                         </View>
                     </View>
-                    <View style={styles.closeCon}>
+                    <View>
                         <Pressable onPress={menuHandler}>
                             <View style={styles.closeInCon}>
                                 <MaterialIcons name="close" size={24} color={Colors.secondary900} />
@@ -54,10 +54,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         elevation: 20,
     },
-    closeCon: {
-        // alignItems: 'flex-end',
-        // backgroundColor:'red'
-    },
     closeInCon: {
         paddingHorizontal: scale(10),
         paddingBottom: scale(10),
@@ -65,9 +61,6 @@ const styles = StyleSheet.create({
     },
     textCon: {
         marginTop: verticalScale(10),
-
-    },
-    singleTextOutCon: {
     },
     menuText: {
         fontSize: moderateScale(17),

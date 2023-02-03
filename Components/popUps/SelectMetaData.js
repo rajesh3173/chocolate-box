@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingHorizontal: scale(40),
         paddingBottom: verticalScale(40),
-
     },
     popHeading: {
         fontSize: moderateScale(20),

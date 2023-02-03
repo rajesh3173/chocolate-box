@@ -62,9 +62,9 @@ const Dashboard = ({ navigation }) => {
 
         while (true) {
             if (pattern.test(initialArray[lastInd])) {
-                // before jan 2022 pattern
+                // before jan 2022 pattern -> dd/mm/yy
                 // let [da, mo, yr] = dtInfo[0].split('/');
-                // after aug 2022 pattern
+                // after aug 2022 pattern -> mm/dd/yy
                 let [mo, da, yr] = initialArray[lastInd].split(": ")[0].split(" - ")[0].split(", ")[0].split("/");
                 if (+yr < 22) {
                     let i = mo;
@@ -88,9 +88,9 @@ const Dashboard = ({ navigation }) => {
                 const chatDet = firstChatDet[0].split(" - ");
                 pickedFileInfo["personOne"] = chatDet[1];
                 const chatdate = chatDet[0].split(", ");
-                // before jan 2022 pattern
+                // before jan 2022 pattern -> dd/mm/yy
                 // let [da, mo, yr] = dtInfo[0].split('/');
-                // after aug 2022 pattern
+                // after aug 2022 pattern -> mm/dd/yy
                 let [mo, da, yr] = chatdate[0].split('/');
                 if (chageDate) {
                     let i = mo;
@@ -109,8 +109,10 @@ const Dashboard = ({ navigation }) => {
         while (true) {
             if (pattern.test(initialArray[ind])) {
                 const chatDet = initialArray[ind].split(": ")[0];
-                pickedFileInfo["personTwo"] = chatDet.split(" - ")[1];
-                break;
+                if (!chatDet.includes(pickedFileInfo["personOne"])) {
+                    pickedFileInfo["personTwo"] = chatDet.split(" - ")[1];
+                    break;
+                }
             }
             ind = ind + 1;
         }
