@@ -145,9 +145,9 @@ const Chat = ({ route, navigation }) => {
                 let chatText = itemArray[1];
                 const dtInfo = itemArray[0].split(", ");
                 const timeInfo = dtInfo[1].split(" - ")[0];
-                // before jan 2022 pattern
+                // before jan 2022 pattern -> dd/mm/yy
                 // let [da, mo, yr] = dtInfo[0].split('/');
-                // after aug 2022 pattern
+                // after aug 2022 pattern -> mm/dd/yy
                 let [mo, da, yr] = dtInfo[0].split('/');
                 if (+endYr < 2022) {
                     let i = mo;

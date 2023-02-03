@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
         borderRadius: scale(20),
         backgroundColor: Colors.backgroundAll,
         width: "75%"
-
     },
     headCon: {
         paddingVertical: verticalScale(15),
